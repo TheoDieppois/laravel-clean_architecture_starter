@@ -87,44 +87,45 @@ tests/
 
 ## 🛠️ Points centraux
 
-1. DTO (Data Transfer Object)
+### 1. DTO (Data Transfer Object)
 
 -   **Rôle** : transport de données entre les couches sans exposer vos entités.
 -   **Exemple** : `CreateTodoInput` reçoit les champs validés de la requête HTTP.
 -   **Avantage** : découplage fort, validation et mapping explicites.
 
-2. Mappers
+### 2. Mappers
 
 -   **Rôle** : convertir un DTO en Entity (ou vice versa), ou Entity ↔ Model Eloquent.
 -   **Exemple** : `TodoInputMapper::toEntity(CreateTodoInput $dto): Todo`.
 -   **Avantage** : centralisation de la logique de transformation.
 
-3. Use Cases (Cas d’usage)
+### 3. Use Cases (Cas d’usage)
 
 -   **Rôle** : encapsuler chaque opération métier (« créer un todo », « lister les todos », …).
 -   **Entrée** : un DTO (input), sortie : un DTO (output) ou void.
 -   **Avantage** : tests unitaires ultra‑simples en mockant le repository.
 
-4. Domain — Entities & Value Objects
+### 4. Domain — Entities & Value Objects
 
 -   **Entity** : objet métier (ici `Todo`) avec son identité et ses comportements.
 -   **Value Object** : objet immutable pour des concepts (e.g. `TodoId`).
 -   **Contract** : interface `TodoRepository` dans le domaine, sans dépendance à Laravel.
 
-5. Infrastructure — Persistence
+### 5. Infrastructure — Persistence
 
 -   Pattern Repository + Data Mapper :
     -   EloquentTodoRepository : implémentation via Eloquent ORM.
     -   FileTodoRepository : stockage simple dans un fichier.
 -   Organisation par agrégat : tout le code persistence de “Todo” dans `Infrastructure/Persistence/Todo`.
 
-6. HTTP — Controllers & Requests
+### 6. HTTP — Controllers & Requests
 
 -   Controller (`TodoController`) : orchestration des Use Cases.
 -   FormRequest (`CreateTodoRequest`) : encapsule la validation HTTP.
 
-7. ServiceProvider
-   Dans `AppServiceProvider`, on bind l’interface du repository à son implémentation :
+### 7. ServiceProvider
+
+Dans `AppServiceProvider`, on bind l’interface du repository à son implémentation :
 
 ```php
 $this->app->bind(
